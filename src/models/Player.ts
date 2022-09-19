@@ -3,6 +3,6 @@ export interface Player {
   name: string;
   lastName: string;
   age: number;
-  teamID: string;
+  teamID: string | null;
   goals?: number;
 }
