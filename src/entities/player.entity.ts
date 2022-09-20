@@ -1,8 +1,7 @@
 export interface Player {
   ID: string;
   name: string;
-  lastName: string;
   age: number;
-  teamID: string | null;
+  team: string | null;
   goals?: number;
 }
