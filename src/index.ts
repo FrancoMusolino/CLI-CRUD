@@ -67,7 +67,7 @@ program
         });
 
         try {
-          player.create({ name, age, team, goals });
+          player.create({ name, age, team: team || null, goals });
           return console.log(chalk.green("Jugador creado exitosamente"));
         } catch (error) {
           return console.log(chalk.red(error));
@@ -76,14 +76,25 @@ program
       case CRUD.READ:
         const players = player.getAll();
 
-        const transfromPlayers = players.map(({ age, name, team, goals }) => ({
-          name,
-          age,
-          team,
-          goals,
-        }));
+        return console.table(players);
 
-        return console.table(transfromPlayers);
+      case CRUD.READ_ONE:
+        const { id } = await prompt({
+          name: "id",
+          type: "text",
+          message: "Ingrese el ID del jugador a buscar",
+        });
+
+        const singlePlayer = player.getOne(id);
+
+        if (singlePlayer instanceof Error) {
+          return console.log(chalk.red(singlePlayer.message));
+        }
+
+        // console.log(
+        //   chalk.green(`El jugador encontrado es: ${singlePlayer.name}`)
+        // );
+        console.table(singlePlayer);
     }
   });
 

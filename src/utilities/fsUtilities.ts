@@ -1,9 +1,9 @@
 import { readFileSync } from "fs";
 import { writeFile } from "fs/promises";
 
-import { Player, Team } from "@entities";
+import { PlayerEntity, TeamEntity } from "@entities";
 
-export const readPlayersFile = (path: string): Player[] => {
+export const readPlayersFile = (path: string): PlayerEntity[] => {
   try {
     const data = readFileSync(path);
     return JSON.parse(data.toString());
@@ -12,7 +12,10 @@ export const readPlayersFile = (path: string): Player[] => {
   }
 };
 
-export const writePlayersFile = async (path: string, payload: Player[]) => {
+export const writePlayersFile = async (
+  path: string,
+  payload: PlayerEntity[]
+) => {
   try {
     await writeFile(path, JSON.stringify(payload));
   } catch (error) {
@@ -20,7 +23,7 @@ export const writePlayersFile = async (path: string, payload: Player[]) => {
   }
 };
 
-export const readTeamsFile = (path: string): Team[] => {
+export const readTeamsFile = (path: string): TeamEntity[] => {
   try {
     const data = readFileSync(path);
     return JSON.parse(data.toString());
@@ -29,7 +32,7 @@ export const readTeamsFile = (path: string): Team[] => {
   }
 };
 
-export const writeTeamsFile = async (path: string, payload: Team[]) => {
+export const writeTeamsFile = async (path: string, payload: TeamEntity[]) => {
   try {
     await writeFile(path, JSON.stringify(payload));
   } catch (error) {

@@ -1,5 +1,5 @@
-import { Team } from "@entities";
+import { TeamEntity } from "@entities";
 
-export type createTeamDto = Omit<Team, "ID">;
+export type createTeamDto = Omit<TeamEntity, "ID">;
 
 export type updateTeamDto = Partial<createTeamDto>;

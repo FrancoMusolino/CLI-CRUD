@@ -1,4 +1,4 @@
-export interface Player {
+export interface PlayerEntity {
   ID: string;
   name: string;
   age: number;

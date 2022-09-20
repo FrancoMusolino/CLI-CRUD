@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { Player } from "@entities";
+import { PlayerEntity } from "@entities";
 import { createPlayerDto, updatePlayerDto } from "@dtos";
 import { readPlayersFile, writePlayersFile } from "../utilities";
 
 export class Players {
   static fileName = "database/players.json";
-  private players: Player[];
+  private players: PlayerEntity[];
 
   constructor() {
     this.players = readPlayersFile(Players.fileName);
@@ -37,6 +37,8 @@ export class Players {
       if (error instanceof Error) {
         return error.message;
       }
+
+      return "Algo salió mal";
     }
   }
 
@@ -54,6 +56,8 @@ export class Players {
       if (error instanceof Error) {
         return error.message;
       }
+
+      return "Algo salió mal";
     }
   }
 
@@ -69,6 +73,8 @@ export class Players {
       if (error instanceof Error) {
         return error.message;
       }
+
+      return "Algo salió mal";
     }
   }
 }

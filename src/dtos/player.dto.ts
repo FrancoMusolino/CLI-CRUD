@@ -1,5 +1,5 @@
-import { Player } from "@entities";
+import { PlayerEntity } from "@entities";
 
-export type createPlayerDto = Omit<Player, "ID">;
+export type createPlayerDto = Omit<PlayerEntity, "ID">;
 
 export type updatePlayerDto = Partial<createPlayerDto>;

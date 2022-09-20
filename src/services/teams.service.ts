@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { Team } from "@entities";
+import { TeamEntity } from "@entities";
 import { createTeamDto, updateTeamDto } from "@dtos";
 import { readTeamsFile, writeTeamsFile } from "../utilities";
 
 export class Teams {
   static fileName = "database/teams.json";
-  private teams: Team[];
+  private teams: TeamEntity[];
 
   constructor() {
     this.teams = readTeamsFile(Teams.fileName);

@@ -1,22 +1,40 @@
-import { Players } from "../services";
+import { Players, Teams } from "../services";
+
 import { createPlayerDto, updatePlayerDto } from "@dtos";
 
 export class Player {
-  private readonly playersModel: Players;
+  private readonly playersService: Players;
+  private readonly teamsService: Teams;
 
   constructor() {
-    this.playersModel = new Players();
+    this.playersService = new Players();
+    this.teamsService = new Teams();
+  }
+
+  private getTeam(teamID: string) {
+    this.teamsService.findOne(teamID);
   }
 
   getAll() {
-    return this.playersModel.findAll();
+    return this.playersService.findAll();
   }
 
   getOne(id: string) {
-    return this.playersModel.findOne(id);
+    try {
+      const player = this.playersService.findOne(id);
+
+      if (player.team) {
+        const team = this.getTeam(player.team);
+        return { ...player, team };
+      }
+
+      return player;
+    } catch (error) {
+      return error;
+    }
   }
 
   create(payload: createPlayerDto) {
-    this.playersModel.create(payload);
+    this.playersService.create(payload);
   }
 }

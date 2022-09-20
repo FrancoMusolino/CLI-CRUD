@@ -1,4 +1,4 @@
-export interface Team {
+export interface TeamEntity {
   ID: string;
   name: string;
   country: string;
