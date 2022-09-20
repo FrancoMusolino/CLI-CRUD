@@ -1,10 +1,12 @@
 import { Team } from "entities";
+import { readTeamsFile } from "../utilities";
 
-export class Players {
+export class Teams {
+  static fileName = "database/teams.json";
   private readonly teams: Team[];
 
   constructor() {
-    this.teams = [];
+    this.teams = readTeamsFile(Teams.fileName);
   }
 
   findAll() {
