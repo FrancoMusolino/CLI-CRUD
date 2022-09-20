@@ -3,5 +3,5 @@ export enum CRUD {
   READ = "READ",
   READ_ONE = "READ_ONE",
   UPDATE = "UPDATE",
-  DELETE = "GET",
+  DELETE = "DELETE",
 }

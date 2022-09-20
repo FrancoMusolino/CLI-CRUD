@@ -6,7 +6,7 @@ import { readPlayersFile, writePlayersFile } from "../utilities";
 
 export class Players {
   static fileName = "database/players.json";
-  private players: PlayerEntity<string>[];
+  private players: PlayerEntity<string | null>[];
 
   constructor() {
     this.players = readPlayersFile(Players.fileName);

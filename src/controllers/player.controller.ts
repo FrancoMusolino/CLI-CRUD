@@ -15,11 +15,11 @@ export class Player {
     return this.teamsService.findOne(teamID);
   }
 
-  getAll(): PlayerEntity<string>[] {
+  getAll(): PlayerEntity<string | null>[] {
     return this.playersService.findAll();
   }
 
-  getOne(id: string): PlayerEntity<TeamEntity | string> | Error {
+  getOne(id: string): PlayerEntity<TeamEntity | null> | Error {
     try {
       const player = this.playersService.findOne(id);
 
@@ -28,7 +28,7 @@ export class Player {
         return { ...player, team };
       }
 
-      return player;
+      return { ...player, team: null };
     } catch (error) {
       return error as Error;
     }
@@ -36,8 +36,8 @@ export class Player {
 
   create(payload: createPlayerDto): void {
     try {
-      const exist = this.getTeam(payload.team);
-      if (exist) {
+      const exist = payload.team && this.getTeam(payload.team);
+      if (exist || !payload.team) {
         this.playersService.create(payload);
       }
     } catch (error) {
