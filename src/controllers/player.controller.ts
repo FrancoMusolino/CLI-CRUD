@@ -15,11 +15,11 @@ export class Player {
     return this.teamsService.findOne(teamID);
   }
 
-  getAll(): PlayerEntity<string | null>[] {
+  getAll(): PlayerEntity<string>[] {
     return this.playersService.findAll();
   }
 
-  getOne(id: string): PlayerEntity<TeamEntity | null> | Error {
+  getOne(id: string): PlayerEntity<TeamEntity> | Error {
     try {
       const player = this.playersService.findOne(id);
 

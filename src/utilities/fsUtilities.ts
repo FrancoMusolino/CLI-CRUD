@@ -3,9 +3,7 @@ import { writeFile } from "fs/promises";
 
 import { PlayerEntity, TeamEntity } from "@entities";
 
-export const readPlayersFile = (
-  path: string
-): PlayerEntity<string | null>[] => {
+export const readPlayersFile = (path: string): PlayerEntity<string>[] => {
   try {
     const data = readFileSync(path);
     return JSON.parse(data.toString());
@@ -17,7 +15,7 @@ export const readPlayersFile = (
 
 export const writePlayersFile = async (
   path: string,
-  payload: PlayerEntity<string | null>[]
+  payload: PlayerEntity<string>[]
 ) => {
   try {
     await writeFile(path, JSON.stringify(payload));
