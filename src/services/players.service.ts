@@ -6,7 +6,7 @@ import { readPlayersFile, writePlayersFile } from "../utilities";
 
 export class Players {
   static fileName = "database/players.json";
-  private players: PlayerEntity[];
+  private players: PlayerEntity<string>[];
 
   constructor() {
     this.players = readPlayersFile(Players.fileName);
@@ -37,8 +37,6 @@ export class Players {
       if (error instanceof Error) {
         return error.message;
       }
-
-      return "Algo salió mal";
     }
   }
 
@@ -56,8 +54,6 @@ export class Players {
       if (error instanceof Error) {
         return error.message;
       }
-
-      return "Algo salió mal";
     }
   }
 
@@ -73,8 +69,6 @@ export class Players {
       if (error instanceof Error) {
         return error.message;
       }
-
-      return "Algo salió mal";
     }
   }
 }

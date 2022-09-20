@@ -3,18 +3,19 @@ import { writeFile } from "fs/promises";
 
 import { PlayerEntity, TeamEntity } from "@entities";
 
-export const readPlayersFile = (path: string): PlayerEntity[] => {
+export const readPlayersFile = (path: string): PlayerEntity<string>[] => {
   try {
     const data = readFileSync(path);
     return JSON.parse(data.toString());
   } catch (error) {
+    writePlayersFile(path, []);
     return [];
   }
 };
 
 export const writePlayersFile = async (
   path: string,
-  payload: PlayerEntity[]
+  payload: PlayerEntity<string>[]
 ) => {
   try {
     await writeFile(path, JSON.stringify(payload));
@@ -28,6 +29,7 @@ export const readTeamsFile = (path: string): TeamEntity[] => {
     const data = readFileSync(path);
     return JSON.parse(data.toString());
   } catch (error) {
+    writeTeamsFile(path, []);
     return [];
   }
 };

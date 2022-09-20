@@ -1,5 +1,5 @@
 import { Players, Teams } from "../services";
-
+import { PlayerEntity, TeamEntity } from "@entities";
 import { createPlayerDto, updatePlayerDto } from "@dtos";
 
 export class Player {
@@ -11,15 +11,15 @@ export class Player {
     this.teamsService = new Teams();
   }
 
-  private getTeam(teamID: string) {
-    this.teamsService.findOne(teamID);
+  private getTeam(teamID: string): TeamEntity {
+    return this.teamsService.findOne(teamID);
   }
 
-  getAll() {
+  getAll(): PlayerEntity<string>[] {
     return this.playersService.findAll();
   }
 
-  getOne(id: string) {
+  getOne(id: string): PlayerEntity<TeamEntity | string> | Error {
     try {
       const player = this.playersService.findOne(id);
 
@@ -30,11 +30,18 @@ export class Player {
 
       return player;
     } catch (error) {
-      return error;
+      return error as Error;
     }
   }
 
-  create(payload: createPlayerDto) {
-    this.playersService.create(payload);
+  create(payload: createPlayerDto): void {
+    try {
+      const exist = this.getTeam(payload.team);
+      if (exist) {
+        this.playersService.create(payload);
+      }
+    } catch (error) {
+      throw new Error("El club que está intentando asignar no existe");
+    }
   }
 }
