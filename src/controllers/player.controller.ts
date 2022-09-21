@@ -44,4 +44,8 @@ export class Player {
       throw new Error("El club que está intentando asignar no existe");
     }
   }
+
+  async delete(id: string): Promise<string> {
+    return (await this.playersService.delete(id)) as string;
+  }
 }

@@ -81,20 +81,51 @@ program
         console.log(
           chalk.green(`El jugador encontrado es: ${singlePlayer.name}`)
         );
-        console.log(singlePlayer);
+        return console.log(singlePlayer);
       }
 
-      case CRUD.UPDATE: {
+      // case CRUD.UPDATE: {
+      //   const { id } = await prompt({
+      //     name: "id",
+      //     type: "text",
+      //     message: "Ingrese el ID del jugador a modificar",
+      //   });
+
+      //   const singlePlayer = player.getOne(id);
+
+      //   if (singlePlayer instanceof Error) {
+      //     return console.log(chalk.red(singlePlayer.message));
+      //   }
+      // }
+
+      case CRUD.DELETE: {
         const { id } = await prompt({
           name: "id",
           type: "text",
-          message: "Ingrese el ID del jugador a modificar",
+          message: "Ingrese el ID del jugador a eliminar",
         });
 
-        const singlePlayer = player.getOne(id);
+        const exist = player.getOne(id);
 
-        if (singlePlayer instanceof Error) {
-          return console.log(chalk.red(singlePlayer.message));
+        if (exist instanceof Error) {
+          return console.log(chalk.red(exist.message));
+        }
+
+        const { validation } = await prompt({
+          name: "validation",
+          type: "confirm",
+          message: `¿Seguro que desas eliminar a ${exist.name} ?`,
+        });
+
+        if (validation) {
+          try {
+            await player.delete(id);
+            return console.log(chalk.green("Jugador eliminado exitosamente"));
+          } catch (error) {
+            return console.log(chalk.red("Algo salió mal"));
+          }
+        } else {
+          return console.log(chalk.blue("Operación cancelada"));
         }
       }
     }
