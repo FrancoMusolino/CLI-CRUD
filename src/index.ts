@@ -1,9 +1,10 @@
 import { Command } from "commander";
-import prompt from "prompts";
+import prompt, { PromptObject } from "prompts";
 import chalk from "chalk";
 
 import { Player, Team } from "./controllers";
 import { CRUD } from "./enums";
+import { playerQuestions, teamQuestions } from "./utilities";
 
 const player = new Player();
 const team = new Team();
@@ -45,26 +46,9 @@ program
     });
 
     switch (action) {
-      case CRUD.CREATE:
-        const { name } = await prompt({
-          name: "name",
-          type: "text",
-          message: "Ingrese el nombre del jugador",
-        });
-        const { age } = await prompt({
-          name: "age",
-          type: "number",
-          message: "Ingrese la edad del jugador",
-        });
-        const { goals } = await prompt({
-          name: "goals",
-          type: "number",
-          message: "Ingrese los goles hechos en su carrera",
-        });
-        const { team } = await prompt({
-          name: "team",
-          type: "text",
-          message: "Ingrese el ID del equipo actual del jugador",
+      case CRUD.CREATE: {
+        const { name, age, team, goals } = await prompt(playerQuestions, {
+          onCancel,
         });
 
         try {
@@ -73,13 +57,15 @@ program
         } catch (error) {
           return console.log(chalk.red(error));
         }
+      }
 
-      case CRUD.READ:
+      case CRUD.READ: {
         const players = player.getAll();
 
         return console.table(players);
+      }
 
-      case CRUD.READ_ONE:
+      case CRUD.READ_ONE: {
         const { id } = await prompt({
           name: "id",
           type: "text",
@@ -96,6 +82,21 @@ program
           chalk.green(`El jugador encontrado es: ${singlePlayer.name}`)
         );
         console.log(singlePlayer);
+      }
+
+      case CRUD.UPDATE: {
+        const { id } = await prompt({
+          name: "id",
+          type: "text",
+          message: "Ingrese el ID del jugador a modificar",
+        });
+
+        const singlePlayer = player.getOne(id);
+
+        if (singlePlayer instanceof Error) {
+          return console.log(chalk.red(singlePlayer.message));
+        }
+      }
     }
   });
 
@@ -132,27 +133,11 @@ program
     });
 
     switch (action) {
-      case CRUD.CREATE:
-        const { name } = await prompt({
-          name: "name",
-          type: "text",
-          message: "Ingrese el nombre del equipo",
-        });
-        const { country } = await prompt({
-          name: "country",
-          type: "text",
-          message: "Ingrese el país del equipo",
-        });
-        const { foundation } = await prompt({
-          name: "foundation",
-          type: "date",
-          message: "Ingrese la fecha de fundación",
-        });
-        const { titles } = await prompt({
-          name: "titles",
-          type: "number",
-          message: "Ingrese la cantidad de títulos del equipo",
-        });
+      case CRUD.CREATE: {
+        const { name, country, foundation, titles } = await prompt(
+          teamQuestions,
+          { onCancel }
+        );
 
         try {
           team.create({ name, country, foundation, titles });
@@ -160,13 +145,15 @@ program
         } catch (error) {
           return console.log(chalk.red(error));
         }
+      }
 
-      case CRUD.READ:
+      case CRUD.READ: {
         const teams = team.getAll();
 
         return console.table(teams);
+      }
 
-      case CRUD.READ_ONE:
+      case CRUD.READ_ONE: {
         const { id } = await prompt({
           name: "id",
           type: "text",
@@ -181,7 +168,13 @@ program
 
         console.log(chalk.green(`El equipo encontrado es: ${singleTeam.name}`));
         console.log(singleTeam);
+      }
     }
   });
 
 program.parse();
+
+const onCancel = () => {
+  console.log(chalk.red("Upss, has cancelado la operación"));
+  process.exit(1);
+};
