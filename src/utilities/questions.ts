@@ -52,6 +52,6 @@ export const teamQuestions: PromptObject[] = [
     type: "number",
     message: "Ingrese la cantidad de títulos del equipo",
     min: 0,
-    validate: (val) => !!val && +val >= 0,
+    validate: (val) => !!val,
   },
 ];
