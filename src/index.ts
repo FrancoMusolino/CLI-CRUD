@@ -246,7 +246,41 @@ program
         }
 
         console.log(chalk.green(`El equipo encontrado es: ${singleTeam.name}`));
-        console.log(singleTeam);
+        return console.log(singleTeam);
+      }
+
+      case CRUD.DELETE: {
+        const { id } = await prompt({
+          name: "id",
+          type: "text",
+          message: "Ingrese el ID del equipo a eliminar",
+        });
+
+        const singleTeam = team.getOne(id);
+
+        if (singleTeam instanceof Error) {
+          return console.log(chalk.red(singleTeam.message));
+        }
+
+        const { validation } = await prompt({
+          name: "validation",
+          type: "toggle",
+          message: `¿Seguro que desas eliminar al siguiente equipo: ${singleTeam.name} ?`,
+          initial: true,
+          active: "Si",
+          inactive: "No",
+        });
+
+        if (validation) {
+          try {
+            await team.delete(id);
+            return console.log(chalk.green("Equipo eliminado exitosamente"));
+          } catch (error) {
+            return console.log(chalk.red("Algo salió mal"));
+          }
+        } else {
+          return console.log(chalk.blue("Operación cancelada"));
+        }
       }
     }
   });

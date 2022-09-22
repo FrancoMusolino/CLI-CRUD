@@ -65,4 +65,18 @@ export class Players {
       return error as Error;
     }
   }
+
+  async deletePlayersTeam(teamID: string) {
+    const newPlayers = this.players.map((player) =>
+      player.team !== teamID ? player : { ...player, team: null }
+    );
+
+    this.players = newPlayers;
+
+    try {
+      await writePlayersFile(Players.fileName, this.players);
+    } catch (error) {
+      return error as Error;
+    }
+  }
 }

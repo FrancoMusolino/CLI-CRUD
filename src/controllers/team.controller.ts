@@ -1,12 +1,14 @@
-import { Teams } from "../services";
-import { TeamEntity } from "@entities";
+import { Players, Teams } from "../services";
+import { TeamEntity, PlayerEntity } from "@entities";
 import { createTeamDto, updateTeamDto } from "@dtos";
 
 export class Team {
+  private readonly playersService: Players;
   private readonly teamsService: Teams;
 
   constructor() {
     this.teamsService = new Teams();
+    this.playersService = new Players();
   }
 
   getAll(): TeamEntity[] {
@@ -24,5 +26,14 @@ export class Team {
 
   create(payload: createTeamDto): void {
     this.teamsService.create(payload);
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.playersService.deletePlayersTeam(id);
+      await this.teamsService.delete(id);
+    } catch (error) {
+      throw error as Error;
+    }
   }
 }
