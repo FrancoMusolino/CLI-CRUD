@@ -12,12 +12,13 @@ export const playerQuestions: PromptObject[] = [
     name: "age",
     type: "number",
     message: "Ingrese la edad del jugador (entre 14 y 100)",
-    validate: (val) => !!val && val >= 14 && val <= 100,
+    validate: (val) => !!val && +val >= 14 && +val <= 100,
   },
   {
     name: "goals",
     type: "number",
     message: "Ingrese los goles hechos en su carrera",
+    validate: (val) => !!val && +val >= 0,
   },
   {
     name: "team",
@@ -43,6 +44,7 @@ export const teamQuestions: PromptObject[] = [
     name: "foundation",
     type: "date",
     message: "Ingrese la fecha de fundación",
+    mask: "DD-MM-YYYY",
     format: (val) => new Intl.DateTimeFormat("es").format(val),
   },
   {
@@ -50,6 +52,6 @@ export const teamQuestions: PromptObject[] = [
     type: "number",
     message: "Ingrese la cantidad de títulos del equipo",
     min: 0,
-    validate: (val) => !!val,
+    validate: (val) => !!val && +val >= 0,
   },
 ];

@@ -34,9 +34,7 @@ export class Players {
       await writePlayersFile(Players.fileName, this.players);
       return newPlayer;
     } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
+      return error as Error;
     }
   }
 
@@ -51,9 +49,7 @@ export class Players {
       await writePlayersFile(Players.fileName, this.players);
       return payload;
     } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
+      return error as Error;
     }
   }
 
@@ -66,9 +62,7 @@ export class Players {
       await writePlayersFile(Players.fileName, this.players);
       return id;
     } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
+      return error as Error;
     }
   }
 }

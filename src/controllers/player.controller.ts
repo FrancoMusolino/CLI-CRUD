@@ -11,7 +11,7 @@ export class Player {
     this.teamsService = new Teams();
   }
 
-  private getTeam(teamID: string): TeamEntity {
+  private getTeam(teamID: string): TeamEntity | Error {
     return this.teamsService.findOne(teamID);
   }
 
@@ -25,6 +25,8 @@ export class Player {
 
       if (player.team) {
         const team = this.getTeam(player.team);
+
+        if (team instanceof Error) throw team.message;
         return { ...player, team };
       }
 
@@ -41,7 +43,20 @@ export class Player {
         this.playersService.create(payload);
       }
     } catch (error) {
-      throw new Error("El club que está intentando asignar no existe");
+      throw error as Error;
+    }
+  }
+
+  async update(
+    id: string,
+    payload: updatePlayerDto
+  ): Promise<typeof payload | Error> {
+    try {
+      payload.team && this.getTeam(payload.team);
+
+      return await this.playersService.update(id, payload);
+    } catch (error) {
+      return error as Error;
     }
   }
 

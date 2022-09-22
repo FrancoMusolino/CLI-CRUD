@@ -5,6 +5,8 @@ import chalk from "chalk";
 import { Player, Team } from "./controllers";
 import { CRUD } from "./enums";
 import { playerQuestions, teamQuestions } from "./utilities";
+import { updatePlayerDto } from "@dtos";
+import { PlayerEntity } from "@entities";
 
 const player = new Player();
 const team = new Team();
@@ -12,6 +14,8 @@ const team = new Team();
 const program = new Command();
 
 program.name("CLI APP").description("A simple CLI CRUD APP").version("1.0.0");
+
+/***  PLAYERS COMMAND  ***/
 
 program
   .command("players")
@@ -84,19 +88,58 @@ program
         return console.log(singlePlayer);
       }
 
-      // case CRUD.UPDATE: {
-      //   const { id } = await prompt({
-      //     name: "id",
-      //     type: "text",
-      //     message: "Ingrese el ID del jugador a modificar",
-      //   });
+      case CRUD.UPDATE: {
+        const { id } = await prompt({
+          name: "id",
+          type: "text",
+          message: "Ingrese el ID del jugador a modificar",
+        });
 
-      //   const singlePlayer = player.getOne(id);
+        const exist = player.getOne(id);
 
-      //   if (singlePlayer instanceof Error) {
-      //     return console.log(chalk.red(singlePlayer.message));
-      //   }
-      // }
+        if (exist instanceof Error) {
+          return console.log(chalk.red(exist.message));
+        }
+
+        const updatePlayerQuestion = playerQuestions.map((question) => ({
+          ...question,
+          message: `¿Desea modificar el ${question.name} o dejarlo con su valor actual?`,
+          initial: () => {
+            const key = question.name;
+            const value = Object.entries(exist).find(([k, _v]) => k === key);
+
+            if (value) {
+              return value[0] === "team"
+                ? value[1]
+                  ? value[1].ID
+                  : null
+                : value[1];
+            }
+          },
+        }));
+
+        const { name, age, team, goals } = await prompt(updatePlayerQuestion, {
+          onCancel,
+        });
+
+        try {
+          const updatedFields = await player.update(id, {
+            name,
+            age,
+            team: team || null,
+            goals,
+          });
+
+          if (updatedFields instanceof Error) {
+            return console.log(chalk.red(updatedFields));
+          }
+
+          console.log(chalk.green("Jugador modificado correctamente:"));
+          return console.table(updatedFields);
+        } catch (error) {
+          return console.log(chalk.red(error));
+        }
+      }
 
       case CRUD.DELETE: {
         const { id } = await prompt({
@@ -113,8 +156,11 @@ program
 
         const { validation } = await prompt({
           name: "validation",
-          type: "confirm",
+          type: "toggle",
           message: `¿Seguro que desas eliminar a ${exist.name} ?`,
+          initial: true,
+          active: "Si",
+          inactive: "No",
         });
 
         if (validation) {
@@ -130,6 +176,8 @@ program
       }
     }
   });
+
+/***  TEAMS COMMAND  ***/
 
 program
   .command("teams")
