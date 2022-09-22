@@ -60,7 +60,7 @@ export class Player {
     }
   }
 
-  async delete(id: string): Promise<string> {
-    return (await this.playersService.delete(id)) as string;
+  async delete(id: string): Promise<void> {
+    await this.playersService.delete(id);
   }
 }

@@ -79,7 +79,7 @@ program
         const singlePlayer = player.getOne(id);
 
         if (singlePlayer instanceof Error) {
-          return console.log(chalk.red(singlePlayer.message));
+          return console.log(chalk.red(singlePlayer));
         }
 
         console.log(
