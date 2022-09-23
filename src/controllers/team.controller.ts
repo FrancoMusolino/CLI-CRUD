@@ -28,6 +28,18 @@ export class Team {
     this.teamsService.create(payload);
   }
 
+  async update(
+    id: string,
+    payload: updateTeamDto
+  ): Promise<typeof payload | Error> {
+    try {
+      await this.teamsService.update(id, payload);
+      return payload;
+    } catch (error) {
+      throw error as Error;
+    }
+  }
+
   async delete(id: string): Promise<void> {
     try {
       await this.playersService.deletePlayersTeam(id);

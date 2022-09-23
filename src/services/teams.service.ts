@@ -34,9 +34,7 @@ export class Teams {
       await writeTeamsFile(Teams.fileName, this.teams);
       return newTeam;
     } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
+      return error as Error;
     }
   }
 
@@ -51,9 +49,7 @@ export class Teams {
       await writeTeamsFile(Teams.fileName, this.teams);
       return payload;
     } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
+      return error as Error;
     }
   }
 
@@ -66,9 +62,7 @@ export class Teams {
       await writeTeamsFile(Teams.fileName, this.teams);
       return id;
     } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
+      return error as Error;
     }
   }
 }

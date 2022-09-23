@@ -201,10 +201,6 @@ program
           value: CRUD.READ_ONE,
         },
         {
-          title: "Actualizar un equipo",
-          value: CRUD.UPDATE,
-        },
-        {
           title: "Eliminar un equipo",
           value: CRUD.DELETE,
         },
