@@ -1,4 +1,5 @@
 import { PromptObject } from "prompts";
+import { isNumber } from "util";
 import { countries } from "./countries";
 
 export const playerQuestions: PromptObject[] = [
@@ -6,7 +7,7 @@ export const playerQuestions: PromptObject[] = [
     name: "name",
     type: "text",
     message: "Ingrese el nombre del jugador",
-    validate: (val) => !!val,
+    validate: (val) => !!val && isNaN(val),
   },
   {
     name: "age",
@@ -18,7 +19,7 @@ export const playerQuestions: PromptObject[] = [
     name: "goals",
     type: "number",
     message: "Ingrese los goles hechos en su carrera",
-    validate: (val) => !!val && +val >= 0,
+    validate: (val) => val !== "" && !isNaN(val) && +val >= 0,
   },
   {
     name: "team",
@@ -51,7 +52,6 @@ export const teamQuestions: PromptObject[] = [
     name: "titles",
     type: "number",
     message: "Ingrese la cantidad de títulos del equipo",
-    min: 0,
-    validate: (val) => !!val,
+    validate: (val) => val !== "" && !isNaN(val) && +val >= 0,
   },
 ];

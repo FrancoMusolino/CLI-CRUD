@@ -174,6 +174,10 @@ program
           return console.log(chalk.blue("Operación cancelada"));
         }
       }
+
+      default: {
+        return console.log(chalk.blue("Operación no encontrada"));
+      }
     }
   });
 
@@ -199,6 +203,10 @@ program
         {
           title: "Ver Uno",
           value: CRUD.READ_ONE,
+        },
+        {
+          title: "Actualizar un equipo",
+          value: CRUD.UPDATE,
         },
         {
           title: "Eliminar un equipo",
@@ -245,6 +253,52 @@ program
         return console.log(singleTeam);
       }
 
+      case CRUD.UPDATE: {
+        const { id } = await prompt({
+          name: "id",
+          type: "text",
+          message: "Ingrese el ID del equipo a modificar",
+        });
+
+        const exist = team.getOne(id);
+
+        if (exist instanceof Error) {
+          return console.log(chalk.red(exist.message));
+        }
+
+        const updateTeamQuestions = teamQuestions
+          .filter((question) => question.name !== "foundation")
+          .map((question) => ({
+            ...question,
+            message: `¿Desea modificar el ${question.name} o dejarlo con su valor actual?`,
+            initial: () => {
+              const key = question.name;
+              const value = Object.entries(exist).find(([k, _v]) => k === key);
+
+              if (value) {
+                return value[1];
+              }
+            },
+          }));
+
+        const response = await prompt(updateTeamQuestions, { onCancel });
+
+        try {
+          const updatedFields = await team.update(id, {
+            ...response,
+          });
+
+          if (updatedFields instanceof Error) {
+            return console.log(chalk.red(updatedFields));
+          }
+
+          console.log(chalk.green("Equipo modificado correctamente:"));
+          return console.table(updatedFields);
+        } catch (error) {
+          return console.log(chalk.red(error));
+        }
+      }
+
       case CRUD.DELETE: {
         const { id } = await prompt({
           name: "id",
@@ -277,6 +331,10 @@ program
         } else {
           return console.log(chalk.blue("Operación cancelada"));
         }
+      }
+
+      default: {
+        return console.log(chalk.blue("Operación no encontrada"));
       }
     }
   });
