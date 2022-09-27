@@ -5,8 +5,6 @@ import chalk from "chalk";
 import { Player, Team } from "./controllers";
 import { CRUD } from "./enums";
 import { playerQuestions, teamQuestions } from "./utilities";
-import { updatePlayerDto } from "@dtos";
-import { PlayerEntity } from "@entities";
 
 const player = new Player();
 const team = new Team();

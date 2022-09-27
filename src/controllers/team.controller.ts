@@ -1,5 +1,5 @@
 import { Players, Teams } from "../services";
-import { TeamEntity, PlayerEntity } from "@entities";
+import { TeamEntity } from "@entities";
 import { createTeamDto, updateTeamDto } from "@dtos";
 
 export class Team {
